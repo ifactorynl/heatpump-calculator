@@ -112,5 +112,16 @@
       output.style.display = "block";
     }
   </script>
+
+    <script>
+  function sendHeightToParent() {
+    var height = document.body.scrollHeight;
+    window.parent.postMessage(height, '*');  // Sends height to parent
+  }
+
+  window.onload = sendHeightToParent;
+  window.onresize = sendHeightToParent;
+</script>
+
 </body>
 </html>
