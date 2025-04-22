@@ -1,93 +1,139 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Heat Pump Grant Calculator</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f3f4f6;
-      color: #1f2937;
-      margin: 0;
-      padding: 2rem;
-    }
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      background: white;
-      padding: 2rem;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-    h1 {
-      font-size: 1.75rem;
-      margin-bottom: 1rem;
-      color: #111827;
-    }
-    label {
-      display: block;
-      margin-top: 1rem;
-      font-weight: 600;
-    }
-    input, select {
-      width: 100%;
-      padding: 0.75rem;
-      margin-top: 0.25rem;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      font-size: 1rem;
-    }
-    button {
-      margin-top: 1.5rem;
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      background-color: #10b981;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      width: 100%;
-    }
-    .result {
-      margin-top: 1.5rem;
-      font-weight: 600;
-      background-color: #ecfdf5;
-      border-left: 4px solid #10b981;
-      padding: 1rem;
-      border-radius: 8px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Heat Pump Rebate Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        label {
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .btn {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        .hidden {
+            display: none;
+        }
+        .result {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-radius: 8px;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Heat Pump Grant Calculator</h1>
-    <label for="heating">Current Heating Type:</label>
-    <select id="heating">
-      <option value="oil">Oil</option>
-      <option value="electric">Electric</option>
-      <option value="gas">Gas</option>
-      <option value="wood">Wood</option>
-    </select>
 
-    <label for="income">Household Income:</label>
-    <select id="income">
-      <option value="low">Under $75,000</option>
-      <option value="mid">$75,000 - $150,000</option>
-      <option value="high">Over $150,000</option>
-    </select>
+    <div class="container">
+        <h1>Heat Pump Rebate Calculator</h1>
+        <form id="rebateForm" onsubmit="return handleFormSubmit(event)">
+            <div class="form-step step-1">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" required>
 
-    <label for="province">Province:</label>
-    <select id="province">
-      <option value="NB">New Brunswick</option>
-      <option value="NS">Nova Scotia</option>
-      <option value="PEI">PEI</option>
-    </select>
+                <label for="email">Email Address</label>
+                <input type="email" id="email" required>
 
-    <button onclick="calculate()">Estimate My Savings</button>
+                <label for="city">City/Town</label>
+                <input type="text" id="city" required>
 
-    <div id="output" class="result" style="display:none;"></div>
-  </div>
+                <label for="homeSize">Home Size (Square Feet)</label>
+                <input type="number" id="homeSize" required>
+
+                <label for="heatType">Current Heating Source</label>
+                <select id="heatType">
+                    <option value="oil">Oil</option>
+                    <option value="gas">Gas</option>
+                    <option value="electric">Electric</option>
+                    <option value="propane">Propane</option>
+                </select>
+
+                <button type="submit" class="btn">Start My Rebate Check</button>
+            </div>
+
+            <div class="form-step step-2 hidden">
+                <div class="result">
+                    <p>Your estimated savings: <span id="rebateResult">$0</span></p>
+                    <p><strong>Next Steps:</strong></p>
+                    <p>We'll connect you with a trusted local installer for further assistance. Stay tuned!</p>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function handleFormSubmit(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Retrieve input values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const city = document.getElementById('city').value;
+            const homeSize = parseInt(document.getElementById('homeSize').value, 10);
+            const heatType = document.getElementById('heatType').value;
+
+            // Simple rebate calculation logic (replace with your actual calculation)
+            let rebateAmount = 0;
+            if (heatType === "oil") {
+                rebateAmount = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000; // Example range of $5000 to $10000
+            } else if (heatType === "gas") {
+                rebateAmount = Math.floor(Math.random() * (12000 - 7000 + 1)) + 7000; // Example range for gas
+            } else if (heatType === "electric") {
+                rebateAmount = Math.floor(Math.random() * (8000 - 4000 + 1)) + 4000; // Example range for electric
+            }
+
+            // Display the result
+            document.querySelector('.step-1').classList.add('hidden');
+            document.querySelector('.step-2').classList.remove('hidden');
+            document.getElementById('rebateResult').textContent = `$${rebateAmount.toLocaleString()}`;
+
+            // Optionally, send email with calculator result using a backend or email service.
+            // For example, using an email API or through your form handling service.
+        }
+    </script>
+
 </body>
 </html>
