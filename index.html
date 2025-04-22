@@ -106,34 +106,18 @@
 
     <script>
         function handleFormSubmit(event) {
-            event.preventDefault(); // Prevent form submission
+            event.preventDefault(); // Prevent the form from reloading the page
 
-            // Retrieve input values
+            // Retrieve the input values
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const city = document.getElementById('city').value;
             const homeSize = parseInt(document.getElementById('homeSize').value, 10);
             const heatType = document.getElementById('heatType').value;
 
-            // Simple rebate calculation logic (replace with your actual calculation)
+            // Example rebate calculation logic
             let rebateAmount = 0;
+
+            // Simple rebate logic based on heating source
             if (heatType === "oil") {
-                rebateAmount = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000; // Example range of $5000 to $10000
-            } else if (heatType === "gas") {
-                rebateAmount = Math.floor(Math.random() * (12000 - 7000 + 1)) + 7000; // Example range for gas
-            } else if (heatType === "electric") {
-                rebateAmount = Math.floor(Math.random() * (8000 - 4000 + 1)) + 4000; // Example range for electric
-            }
-
-            // Display the result
-            document.querySelector('.step-1').classList.add('hidden');
-            document.querySelector('.step-2').classList.remove('hidden');
-            document.getElementById('rebateResult').textContent = `$${rebateAmount.toLocaleString()}`;
-
-            // Optionally, send email with calculator result using a backend or email service.
-            // For example, using an email API or through your form handling service.
-        }
-    </script>
-
-</body>
-</html>
+                rebateAmount = Math.floor(Math.random() * (10000 - 5000 + 1)) + 500*
