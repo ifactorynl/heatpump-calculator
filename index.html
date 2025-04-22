@@ -8,7 +8,7 @@
     <style>
         /* Base Styling for the Body */
         body {
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
             background-color: #f4f4f4;
             color: #333;
             margin: 0;
@@ -18,41 +18,50 @@
 
         /* Container Styling */
         .container {
-            width: 80%;
-            max-width: 1200px;
+            width: 90%;
+            max-width: 800px;
             margin: 50px auto;
             padding: 20px;
             background-color: #ffffff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
+            text-align: center;
         }
 
         /* Header Styling */
         h1 {
             font-size: 2.5rem;
-            text-align: center;
-            color: #1e73be;  /* Heat Pump Hub's main blue color */
-            margin-bottom: 30px;
+            color: #1e73be;
+            margin-bottom: 20px;
         }
 
         /* Form Styling */
         form {
             display: flex;
             flex-direction: column;
+            align-items: center;
+        }
+
+        .form-step {
+            width: 100%;
+            margin-bottom: 20px;
         }
 
         /* Input Fields */
-        input[type="text"], input[type="number"], select {
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+        input[type="text"], input[type="email"], select, input[type="number"] {
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
             font-size: 1rem;
             width: 100%;
+            max-width: 400px; /* Limits the width of the form fields */
             background-color: #f9f9f9;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
         }
 
-        input[type="text"]:focus, input[type="number"]:focus, select:focus {
+        /* Focused State */
+        input[type="text"]:focus, input[type="email"]:focus, select:focus, input[type="number"]:focus {
             outline: none;
             border-color: #1e73be;
             background-color: #fff;
@@ -61,17 +70,19 @@
         /* Button Styling */
         button[type="submit"] {
             padding: 12px 25px;
-            background-color: #1e73be; /* Blue color for button */
+            background-color: #1e73be;
             color: white;
             font-size: 1.2rem;
             border: none;
             border-radius: 50px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            width: 100%;
+            max-width: 400px;
         }
 
         button[type="submit"]:hover {
-            background-color: #155a8a; /* Darker blue when hovering */
+            background-color: #155a8a;
         }
 
         /* Hidden Step */
@@ -79,9 +90,8 @@
             display: none;
         }
 
-        /* Step Result Styling */
+        /* Result Styling */
         .step-2 {
-            text-align: center;
             font-size: 1.5rem;
             color: #333;
         }
@@ -94,6 +104,10 @@
 
             h1 {
                 font-size: 2rem;
+            }
+
+            input[type="text"], input[type="email"], select, input[type="number"], button {
+                max-width: 100%;
             }
         }
     </style>
@@ -108,13 +122,23 @@
                 <input type="text" id="name" placeholder="Full Name" required>
                 <input type="email" id="email" placeholder="Email Address" required>
                 <input type="text" id="city" placeholder="City/Town" required>
-                <input type="number" id="homeSize" placeholder="Home Size (sq ft)" required>
+                
+                <!-- Home Size Dropdown -->
+                <select id="homeSize" required>
+                    <option value="">Select Home Size (sq ft)</option>
+                    <option value="2000-2500">2000 - 2500 sq ft</option>
+                    <option value="2500-3500">2500 - 3500 sq ft</option>
+                    <option value="3500+">3500+ sq ft</option>
+                </select>
+                
+                <!-- Heating Source Selection -->
                 <select id="heatType" required>
                     <option value="">Select Your Heating Source</option>
                     <option value="oil">Oil</option>
                     <option value="electric">Electric</option>
                     <option value="gas">Gas</option>
                 </select>
+
                 <button type="submit">Start My Rebate Check</button>
             </div>
 
@@ -133,7 +157,7 @@
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const city = document.getElementById('city').value;
-            const homeSize = parseInt(document.getElementById('homeSize').value, 10);
+            const homeSize = document.getElementById('homeSize').value;
             const heatType = document.getElementById('heatType').value;
 
             // Rebate calculation logic
@@ -146,13 +170,21 @@
                 rebateAmount = 5000;
             }
 
+            // Adjust rebate for home size
+            if (homeSize === '2000-2500') {
+                rebateAmount += 1000;
+            } else if (homeSize === '2500-3500') {
+                rebateAmount += 2000;
+            } else if (homeSize === '3500+') {
+                rebateAmount += 3000;
+            }
+
             // Show result
             document.querySelector('.step-1').classList.add('hidden');
             document.querySelector('.step-2').classList.remove('hidden');
             document.getElementById('rebateResult').textContent = `You could save up to $${rebateAmount.toLocaleString()} on a heat pump installation!`;
 
-            // Mailchimp API setup (you'll need to add the actual API code here)
-            // Add subscriber to Mailchimp and trigger the autoresponder
+            // Here you would send the form data to Mailchimp or store it accordingly.
         }
     </script>
 
