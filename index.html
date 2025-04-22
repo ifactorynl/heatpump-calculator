@@ -89,39 +89,5 @@
 
     <div id="output" class="result" style="display:none;"></div>
   </div>
-
-  <script>
-    function calculate() {
-      const heating = document.getElementById("heating").value;
-      const income = document.getElementById("income").value;
-      const province = document.getElementById("province").value;
-      let savings = 0;
-
-      if (province === "NB" && heating === "oil" && income === "low") {
-        savings = 10000;
-      } else if (province === "NB" && income === "low") {
-        savings = 8000;
-      } else if (income === "mid") {
-        savings = 5000;
-      } else {
-        savings = 2000;
-      }
-
-      const output = document.getElementById("output");
-      output.innerText = `Based on your inputs, you could qualify for up to $${savings} in heat pump rebates.`;
-      output.style.display = "block";
-    }
-  </script>
-
-    <script>
-  function sendHeightToParent() {
-    var height = document.body.scrollHeight;
-    window.parent.postMessage(height, '*');  // Sends height to parent
-  }
-
-  window.onload = sendHeightToParent;
-  window.onresize = sendHeightToParent;
-</script>
-
 </body>
 </html>
