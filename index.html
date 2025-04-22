@@ -6,62 +6,95 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Heat Pump Rebate Calculator</title>
     <style>
+        /* Base Styling for the Body */
         body {
-            font-family: Arial, sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            box-sizing: border-box;
         }
+
+        /* Container Styling */
         .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 30px;
-            background-color: #fff;
+            width: 80%;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
         }
+
+        /* Header Styling */
         h1 {
+            font-size: 2.5rem;
             text-align: center;
-            color: #2c3e50;
+            color: #1e73be;  /* Heat Pump Hub's main blue color */
+            margin-bottom: 30px;
         }
-        label {
-            font-size: 14px;
-            margin-top: 10px;
+
+        /* Form Styling */
+        form {
+            display: flex;
+            flex-direction: column;
         }
-        input[type="text"],
-        input[type="email"],
-        input[type="number"],
-        select {
-            width: 100%;
+
+        /* Input Fields */
+        input[type="text"], input[type="number"], select {
             padding: 10px;
-            margin-top: 5px;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
             border: 1px solid #ddd;
             border-radius: 4px;
-        }
-        .btn {
-            background-color: #3498db;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            font-size: 1rem;
             width: 100%;
-            font-size: 16px;
+            background-color: #f9f9f9;
         }
-        .btn:hover {
-            background-color: #2980b9;
+
+        input[type="text"]:focus, input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: #1e73be;
+            background-color: #fff;
         }
+
+        /* Button Styling */
+        button[type="submit"] {
+            padding: 12px 25px;
+            background-color: #1e73be; /* Blue color for button */
+            color: white;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #155a8a; /* Darker blue when hovering */
+        }
+
+        /* Hidden Step */
         .hidden {
             display: none;
         }
-        .result {
+
+        /* Step Result Styling */
+        .step-2 {
             text-align: center;
-            font-size: 18px;
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #ecf0f1;
-            border-radius: 8px;
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
@@ -70,54 +103,58 @@
     <div class="container">
         <h1>Heat Pump Rebate Calculator</h1>
         <form id="rebateForm" onsubmit="return handleFormSubmit(event)">
+            <!-- Form Step 1 -->
             <div class="form-step step-1">
-                <label for="name">Full Name</label>
-                <input type="text" id="name" required>
-
-                <label for="email">Email Address</label>
-                <input type="email" id="email" required>
-
-                <label for="city">City/Town</label>
-                <input type="text" id="city" required>
-
-                <label for="homeSize">Home Size (Square Feet)</label>
-                <input type="number" id="homeSize" required>
-
-                <label for="heatType">Current Heating Source</label>
-                <select id="heatType">
+                <input type="text" id="name" placeholder="Full Name" required>
+                <input type="email" id="email" placeholder="Email Address" required>
+                <input type="text" id="city" placeholder="City/Town" required>
+                <input type="number" id="homeSize" placeholder="Home Size (sq ft)" required>
+                <select id="heatType" required>
+                    <option value="">Select Your Heating Source</option>
                     <option value="oil">Oil</option>
-                    <option value="gas">Gas</option>
                     <option value="electric">Electric</option>
-                    <option value="propane">Propane</option>
+                    <option value="gas">Gas</option>
                 </select>
-
-                <button type="submit" class="btn">Start My Rebate Check</button>
+                <button type="submit">Start My Rebate Check</button>
             </div>
 
+            <!-- Step 2 (Result Display) -->
             <div class="form-step step-2 hidden">
-                <div class="result">
-                    <p>Your estimated savings: <span id="rebateResult">$0</span></p>
-                    <p><strong>Next Steps:</strong></p>
-                    <p>We'll connect you with a trusted local installer for further assistance. Stay tuned!</p>
-                </div>
+                <p id="rebateResult"></p>
             </div>
         </form>
     </div>
 
     <script>
-        function handleFormSubmit(event) {
-            event.preventDefault(); // Prevent the form from reloading the page
+        async function handleFormSubmit(event) {
+            event.preventDefault(); // Prevent form reload
 
-            // Retrieve the input values
+            // Retrieve form values
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const city = document.getElementById('city').value;
             const homeSize = parseInt(document.getElementById('homeSize').value, 10);
             const heatType = document.getElementById('heatType').value;
 
-            // Example rebate calculation logic
+            // Rebate calculation logic
             let rebateAmount = 0;
+            if (heatType === 'oil') {
+                rebateAmount = 8000;
+            } else if (heatType === 'electric') {
+                rebateAmount = 6000;
+            } else if (heatType === 'gas') {
+                rebateAmount = 5000;
+            }
 
-            // Simple rebate logic based on heating source
-            if (heatType === "oil") {
-                rebateAmount = Math.floor(Math.random() * (10000 - 5000 + 1)) + 500*
+            // Show result
+            document.querySelector('.step-1').classList.add('hidden');
+            document.querySelector('.step-2').classList.remove('hidden');
+            document.getElementById('rebateResult').textContent = `You could save up to $${rebateAmount.toLocaleString()} on a heat pump installation!`;
+
+            // Mailchimp API setup (you'll need to add the actual API code here)
+            // Add subscriber to Mailchimp and trigger the autoresponder
+        }
+    </script>
+
+</body>
+</html>
